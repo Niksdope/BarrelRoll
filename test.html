@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Barrel Roll</title>
+
+		<style type="text/css">
+				canvas
+				{
+					border: 1px solid black;
+					background-color: white;
+					padding-left: 0;
+					padding-right: 0;
+					margin-left: auto;
+					margin-right: auto;
+					display: block;
+				}
+				body
+				{
+					background-color: black;
+				}
+				h1
+				{
+					color: white;
+					text-align: center;
+				}
+				h3
+				{
+					color:white;
+					text-align: center;
+				}
+		</style>
+
+	</head>
+	<body>
+		<h1>Barrel Roll</h1>
+		<canvas id="game" width="900" height="700"></canvas>
+
+		<script type="text/javascript">
+			var canvas = document.getElementById("game");
+			var ctx = canvas.getContext("2d");
+
+			var barrel = {"h": 80, "w": 92, "desX": 20, "desY": 575};
+
+			var barrelImg = new Image();
+			var groundImg = new Image();
+
+			var fps = 20;
+
+			barrelImg.src = 'animatedBarrel.png';
+			groundImg.src = 'properGround.png';
+
+			var i = 0;
+			var initialiser = 0;
+			var x = 0;
+			var xv = 10;
+
+			function init() {
+
+				var initialiser = 0;
+				
+				ctx.beginPath();
+                ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+				ctx.rect(0,0, canvas.width, canvas.height);
+				ctx.fill();
+                ctx.fillStyle = "rgba(255, 255, 255, 1)";
+				ctx.font = "18px serif";
+				ctx.fillText("Press any key to start the game", 350, 350); 
+				ctx.drawImage(barrelImg, 0, 0, barrel.w, barrel.h, 
+				barrel.desX, barrel.desY, barrel.w, barrel.h);
+
+				window.addEventListener("keydown", function(event) { 
+					if (initialiser == 0)
+					{
+						draw();
+						initialiser += 1;
+					}
+				});
+			}
+
+			function draw() {
+				setTimeout(function() {
+
+					ctx.clearRect(0, 0, canvas.width, (canvas.height-100));
+					window.requestAnimationFrame(draw);
+                    
+                    if (groundImg.width <= canvas.width) {
+							//reset, start from beginning
+							if (x < (canvas.width)) { 
+                                x = 0; 
+                            }
+							//draw aditional image
+							if (x < (canvas.width -groundImg.width)) { 
+                            ctx.drawImage(groundImg, x, 600, groundImg.width, groundImg.height); 
+                            }
+					}
+                    
+					else if (groundImg.width >= canvas.width) {
+							//reset, start from beginning
+							if (x < -(groundImg.width - canvas.width)) { 
+								x = canvas.width + groundImg.width; 
+							}
+							//draw aditional image
+							if (x < (canvas.width + groundImg.width)) { 
+								ctx.drawImage(groundImg, x, 600, 
+								groundImg.width, groundImg.height); 
+							}
+					}
+
+					//draw image
+					ctx.drawImage(groundImg, x, 600, groundImg.width, groundImg.height);
+					//amount to move
+					x -= xv;
+
+					// Animating the barrel
+					if (i == 0)
+					{
+						ctx.drawImage(barrelImg, 0, 0, 
+							barrel.w, barrel.h, 
+							barrel.desX, barrel.desY, 
+							barrel.w, barrel.h);
+						i = 1;
+
+						if (barrel.desX < 150)
+						{
+							barrel.desX += 10;
+						}
+					}
+					else if (i == 1)
+					{
+						ctx.drawImage(barrelImg, 99, 0, 
+								barrel.w, barrel.h,
+								barrel.desX, barrel.desY,
+								barrel.w, barrel.h);
+						i = 0;
+						if (barrel.desX < 150)
+						{
+							barrel.desX += 10;
+						}
+					}
+				}, 1000/fps);
+			}
+
+			init();
+		</script>
+		<h3>Rules</h3>
+
+	</body>
+
+</html>
