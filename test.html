@@ -42,7 +42,27 @@
 			var canvas = document.getElementById("game");
 			var ctx = canvas.getContext("2d");
 
-			var barrel = {"h": 80, "w": 92, "desX": 20, "desY": 575};
+			var barrel = {"h": 80, "w": 92, "desX": 0, "desY": 575, "jump": function() {
+					if (barrel.jumping == true && barrel.falling == false && barrel.desY > barrel.jumpHeight)
+					{
+						barrel.desY -= 20;
+					}
+					else if (barrel.jumpHeight == barrel.desY)
+					{
+						barrel.falling = true;
+						setTimeout(barrel.jump, 5000);
+						barrel.desY += 20;
+					}
+					else if (barrel.falling == true && barrel.desY < barrel.jumpHeight + 80)
+					{
+						barrel.desY += 20;
+					}
+					else if (barrel.jumpHeight +80 == barrel.desY)
+					{
+						barrel.jumping = false;
+						barrel.falling = false;
+					}
+			}, "jumping": false, "falling": false, "jumpHeight": 0};
 
 			var barrelImg = new Image();
 			var groundImg = new Image();
@@ -77,6 +97,13 @@
 						draw();
 						initialiser += 1;
 					}
+
+					if (barrel.jumping == false && event.keyCode == 38)
+					{
+						barrel.jumpHeight = barrel.desY - 80;
+						barrel.jumping = true;
+					}
+
 				});
 			}
 
@@ -86,6 +113,7 @@
 					ctx.clearRect(0, 0, canvas.width, (canvas.height-100));
 					window.requestAnimationFrame(draw);
                     
+                    // _____________ Drawing the moving floor ______________________________________
                     if (groundImg.width <= canvas.width) {
 							//reset, start from beginning
 							if (x < (canvas.width)) { 
@@ -114,20 +142,16 @@
 					//amount to move
 					x -= xv;
 
-					// Animating the barrel
+					// _____________ Animating the barrel ___________________________________________
 					if (i == 0)
 					{
 						ctx.drawImage(barrelImg, 0, 0, 
 							barrel.w, barrel.h, 
 							barrel.desX, barrel.desY, 
 							barrel.w, barrel.h);
-						i = 1;
-
-						if (barrel.desX < 150)
-						{
-							barrel.desX += 10;
-						}
+						i = 1;					
 					}
+
 					else if (i == 1)
 					{
 						ctx.drawImage(barrelImg, 99, 0, 
@@ -135,10 +159,16 @@
 								barrel.desX, barrel.desY,
 								barrel.w, barrel.h);
 						i = 0;
-						if (barrel.desX < 150)
-						{
-							barrel.desX += 10;
-						}
+					}
+
+					if (barrel.desX < 150)
+					{
+						barrel.desX += 5;
+					}
+					
+					if (barrel.jumping)
+					{
+						barrel.jump();
 					}
 				}, 1000/fps);
 			}
