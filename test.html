@@ -47,10 +47,9 @@
 					{
 						barrel.desY -= 20;
 					}
-					else if (barrel.jumpHeight == barrel.desY)
+					else if (barrel.jumpHeight == barrel.desY && barrel.jumpTimer == 8)
 					{
 						barrel.falling = true;
-						setTimeout(barrel.jump, 5000);
 						barrel.desY += 20;
 					}
 					else if (barrel.falling == true && barrel.desY < barrel.jumpHeight + 80)
@@ -62,19 +61,22 @@
 						barrel.jumping = false;
 						barrel.falling = false;
 					}
-			}, "jumping": false, "falling": false, "jumpHeight": 0};
+			}, "jumping": false, "falling": false, "jumpHeight": 0, "jumpTimer": 0};
 
 			var barrelImg = new Image();
 			var groundImg = new Image();
+			var backgroundImg = new Image();
 
 			var fps = 20;
+			var score = 0;
 
 			barrelImg.src = 'animatedBarrel.png';
 			groundImg.src = 'properGround.png';
+			backgroundImg.src = 'backGround.png';
 
 			var i = 0;
 			var initialiser = 0;
-			var x = 0;
+			var x = -canvas.width;
 			var xv = 10;
 
 			function init() {
@@ -102,6 +104,7 @@
 					{
 						barrel.jumpHeight = barrel.desY - 80;
 						barrel.jumping = true;
+						barrel.jumpTimer = 0;
 					}
 
 				});
@@ -112,35 +115,14 @@
 
 					ctx.clearRect(0, 0, canvas.width, (canvas.height-100));
 					window.requestAnimationFrame(draw);
-                    
-                    // _____________ Drawing the moving floor ______________________________________
-                    if (groundImg.width <= canvas.width) {
-							//reset, start from beginning
-							if (x < (canvas.width)) { 
-                                x = 0; 
-                            }
-							//draw aditional image
-							if (x < (canvas.width -groundImg.width)) { 
-                            ctx.drawImage(groundImg, x, 600, groundImg.width, groundImg.height); 
-                            }
-					}
-                    
-					else if (groundImg.width >= canvas.width) {
-							//reset, start from beginning
-							if (x < -(groundImg.width - canvas.width)) { 
-								x = canvas.width + groundImg.width; 
-							}
-							//draw aditional image
-							if (x < (canvas.width + groundImg.width)) { 
-								ctx.drawImage(groundImg, x, 600, 
-								groundImg.width, groundImg.height); 
-							}
-					}
 
-					//draw image
-					ctx.drawImage(groundImg, x, 600, groundImg.width, groundImg.height);
-					//amount to move
-					x -= xv;
+                    drawBackground(); // Draw in the background
+                    drawFloor(); // Draw in the floor
+
+                    // _____________ Writing score to screen _______________________________________
+					ctx.fillStyle = "rgb(255,255,255)";
+					ctx.font = "18px arial";
+					ctx.fillText("Score: " + score, 750, 50);
 
 					// _____________ Animating the barrel ___________________________________________
 					if (i == 0)
@@ -168,9 +150,57 @@
 					
 					if (barrel.jumping)
 					{
+						barrel.jumpTimer += 1;
 						barrel.jump();
 					}
+
+					score += (xv/10);
 				}, 1000/fps);
+			}
+
+			function drawFloor() {
+			    // _____________ Drawing the moving floor ______________________________________
+				if (groundImg.width >= canvas.width) {
+					//reset, start from beginning
+					if (x <= -(groundImg.width + canvas.width)) 
+					{ 
+						x = 0;
+					}
+						
+					if (x <= -(groundImg.width - canvas.width)) 
+					{ 
+						ctx.drawImage(groundImg, (x + groundImg.width), 600, 
+						groundImg.width, groundImg.height); 
+					}
+				}
+
+				//draw aditional image	
+				ctx.drawImage(groundImg, x, 600, groundImg.width, groundImg.height);	
+				//amount to move
+				x -= xv;	
+			}
+
+			function drawBackground() {
+
+				// _____________ Drawing the moving background ______________________________________
+				if (backgroundImg.width >= canvas.width) {
+					//reset, start from beginning
+					if (x <= -(backgroundImg.width + canvas.width)) 
+					{ 
+						x = -canvas.width;
+					}
+						
+					if (x <= -(backgroundImg.width - canvas.width)) 
+					{ 
+						ctx.drawImage(backgroundImg, (x + backgroundImg.width), 0, 
+						backgroundImg.width, backgroundImg.height); 
+					}
+				}
+
+				//draw aditional image	
+				ctx.drawImage(backgroundImg, x, 0, backgroundImg.width, backgroundImg.height);	
+				//amount to move
+				x -= xv;	
 			}
 
 			init();
