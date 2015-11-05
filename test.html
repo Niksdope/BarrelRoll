@@ -63,9 +63,12 @@
 					}
 			}, "jumping": false, "falling": false, "jumpHeight": 0, "jumpTimer": 0};
 
+			var spikes = {"h": 65, "w": 145, "desX": 600, "desY": 590, "timeout": 0};
+
 			var barrelImg = new Image();
 			var groundImg = new Image();
 			var backgroundImg = new Image();
+			var spikesImg = new Image();
 
 			var fps = 20;
 			var score = 0;
@@ -73,8 +76,12 @@
 			barrelImg.src = 'animatedBarrel.png';
 			groundImg.src = 'properGround.png';
 			backgroundImg.src = 'backGround.png';
+			spikesImg.src = 'spikes.png'
 
+			// i and j are used to animate the barrel and spike objects
 			var i = 0;
+			var j = 0;
+
 			var initialiser = 0;
 			var x = -canvas.width;
 			var xv = 10;
@@ -143,6 +150,74 @@
 						i = 0;
 					}
 
+					// _______________ Animating the spikes _________________________________________
+					switch (j)
+					{
+						case 0: // Wait 10 frames at the bottom
+							spikes.timeout += 1;
+
+							ctx.drawImage(spikesImg, 0, 0, 
+							spikes.w, spikes.h, 
+							spikes.desX, spikes.desY, 
+							spikes.w, spikes.h);
+
+							if (spikes.timeout == 5)
+							{
+								j = 1;
+								spikes.timeout = 0;
+							}
+						break;
+						case 1:
+							ctx.drawImage(spikesImg, 145, 0, 
+							spikes.w, spikes.h,
+							spikes.desX, spikes.desY,
+							spikes.w, spikes.h);
+
+							j = 2;
+						break;
+						case 2:
+							ctx.drawImage(spikesImg, 290, 0, 
+							spikes.w, spikes.h,
+							spikes.desX, spikes.desY,
+							spikes.w, spikes.h);
+
+							j = 3;
+						break;
+						case 3: // Wait 10 frames at the top
+							spikes.timeout += 1;
+
+							ctx.drawImage(spikesImg, 435, 0, 
+							spikes.w, spikes.h,
+							spikes.desX, spikes.desY,
+							spikes.w, spikes.h);
+
+							if (spikes.timeout == 5)
+							{
+								j = 4;
+								spikes.timeout = 0;
+							}
+						break;
+						case 4:
+							ctx.drawImage(spikesImg, 290, 0, 
+							spikes.w, spikes.h,
+							spikes.desX, spikes.desY,
+							spikes.w, spikes.h);
+
+							j = 5;
+						break;
+						case 5:
+							ctx.drawImage(spikesImg, 145, 0, 
+							spikes.w, spikes.h,
+							spikes.desX, spikes.desY,
+							spikes.w, spikes.h);
+
+							j = 0;
+						break;
+						default:
+							console.log("failed to animate spikes");
+						break;
+					}
+
 					if (barrel.desX < 150)
 					{
 						barrel.desX += 5;
@@ -201,6 +276,9 @@
 				ctx.drawImage(backgroundImg, x, 0, backgroundImg.width, backgroundImg.height);	
 				//amount to move
 				x -= xv;	
+			}
+
+			function drawSpikes() {	
 			}
 
 			init();
