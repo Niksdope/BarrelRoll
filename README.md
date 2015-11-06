@@ -1,5 +1,5 @@
-# BarrelRoll
-A graphical programming project for GaCo (Ian)
+# BarrelRoll™
+##### A graphical programming project for GaCo (Ian)
 
 
 # To-do
