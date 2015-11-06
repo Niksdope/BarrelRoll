@@ -1,7 +1,8 @@
 # BarrelRoll
 A graphical programming project for GaCo (Ian)
 
-## To-do
+
+# To-do
 - [x] Create a barrel sprite and animate it on the screen
 - [x] Create a ground picture that will be larger than the canvas.width size so that I can use it as a panorama and loop over it to create the illusion of the barrel moving
 - [x] Create a background picture and the same thing as with the ground
@@ -13,7 +14,26 @@ A graphical programming project for GaCo (Ian)
 - [x] Add finishing touches, making everything look as perfectly as possible and the game run as smoothly as possible
 - [ ] Implement a restart button
 
-## Some insight into how it all works
+
+# How it works
+At the beginning of the game, two objects are created. One for the barrel and one for the spikes. It then calls the init() function which loads the start page of the game.
+
+```
+    var barrel = {//Variables & functions for barrel}; 
+    var spikes = {//Variables & functions for spikes};
+    
+    init(); 
+```
+
+function init() {} draws the background and floor of the game and then an opaic rectangle over the entire page asking for user keyboard input, for which an event listener will call the draw() function.
+
+```
+    window.addEventListener("keydown", function(event) {});
+```
+
+The draw() function 
+
+# The files in the repository
 Launch the **index.html** file diretly in your browser and it should recieve information from **barrel.js** and **barrel.css** files to make the game run.
 
 **animatedBarrel**.png was a file I created on photoshop for the barrel object which consists of 2 different states of the same picture to make it possible to animate.
@@ -24,7 +44,8 @@ Launch the **index.html** file diretly in your browser and it should recieve inf
 
 **logo.png** and **rules.png** were just png files used in the html file to make it look nice.
 
-## Finally done
+
+# Fin
 I just finished up the project on 06/11/2015.
 
 I've put everything I was testing in test.html into index.html and have made
@@ -52,5 +73,6 @@ window.addEventListener("load", function(evt) {
 
 but that didn't work either.
 
-## Summary
+
+# Summary
 I hope you're as satisfied with the game as I am GaCo. It wasn't as easy as it looks. I had to research and learn many new things, including creating pixel art and animating it.
