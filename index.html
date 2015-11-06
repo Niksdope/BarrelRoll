@@ -6,157 +6,18 @@
 		<meta charset="UTF-8">
 		<title>Barrel Roll</title>
 
-		<style type="text/css">
-				canvas
-				{
-					border: 1px solid black;
-					background-color: white;
-					padding-left: 0;
-					padding-right: 0;
-					margin-left: auto;
-					margin-right: auto;
-					display: block;
-				}
-				body
-				{
-					background-color: black;
-				}
-				h1
-				{
-					color: white;
-					text-align: center;
-				}
-				h3
-				{
-					color:white;
-					text-align: center;
-				}
-		</style>
-
+		<link rel="stylesheet" type="text/css" href="barrel.css">
 	</head>
 	<body>
-		<h1>Barrel Roll</h1>
-		<canvas id="game" width="900" height="700"></canvas>
-
-		<script type="text/javascript">
-			var canvas = document.getElementById("game");
-			var ctx = canvas.getContext("2d");
-
-			var ball = {"x": 80, "y": 670, "r": 30, "jumpspeed": 10, "jumpheight": 0, "jumping": false,
-			"draw": function() {ctx.beginPath();
-													ctx.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI); 
-													ctx.fill();} };
-			var score = 0;
-
-			var background = new Image();
-			var barrelImg = new Image();
-
-			barrelImg.src = 'animatedBarrel.png';
-
-			// User Variables - customize these to change the image being scrolled, its
-			// direction, and the speed.
-
-			background.src = 'panorama.jpg';
-			var CanvasXSize = 900;
-			var CanvasYSize = 700;
-			var speed = 2; //lower is faster
-			var y = 0; //vertical offset
-
-			// Main program
-
-			var dx = -0.75;
-			var imgW;
-			var imgH;
-			var x = 0;
-			var clearX;
-			var clearY;
-
-			background.onload = function() {
-					imgW = background.width;
-					imgH = background.height;
-					if (imgW > CanvasXSize) { x = CanvasXSize-imgW; } // image larger than canvas
-					if (imgW > CanvasXSize) { clearX = imgW; } // image larger than canvas
-					else { clearX = CanvasXSize; }
-					if (imgH > CanvasYSize) { clearY = imgH; } // image larger than canvas
-					else { clearY = CanvasYSize; }
-					//Set Refresh Rate
-					return setInterval(draw, speed);
-				}
-
-			function draw() {
-					//Clear Canvas
-					ctx.clearRect(0,0,clearX,clearY);
-					//If image is <= Canvas Size
-					if (imgW <= CanvasXSize) {
-							//reset, start from beginning
-							if (x > (CanvasXSize)) { x = 0; }
-							//draw aditional image
-							if (x > (CanvasXSize-imgW)) { ctx.drawImage(background,x-CanvasXSize+1,y,imgW,imgH); }
-					}
-					//If image is > Canvas Size
-					else {
-							//reset, start from beginning
-							if (x < (CanvasXSize)) { x = CanvasXSize-imgW; }
-							//draw aditional image
-							if (x < (CanvasXSize-imgW)) { ctx.drawImage(background,x-imgW+1,y,imgW,imgH); }
-					}
-					//draw image
-					ctx.drawImage(background,x,y,imgW,imgH);
-					//amount to move
-					x += dx;
-
-					//draw Score
-					ctx.font = "18px serif";
-					ctx.fillText("Score: " + score, 790, 20);   
-
-					//draw Barrell
-					ctx.fillStyle = "rgb(255, 255, 255)";
-					if (ball.jumping)
-					{
-						ball.jumpheight = ball.x + 30;
-
-						if (ball.jumpheight < ball.x)
-						{
-							for(var i = 0; i < 3;) {
-								ball.x += ball.jumpspeed;
-								ball.draw();
-							} 
-						}
-					}
-					else if (ball.jumpheight >= ball.x)
-					{
-						for(var i = 0; i < 3;) {
-							ball.x -= ball.jumpspeed;
-
-							ball.draw();
-						}
-					}
-					else 
-					{
-						ball.draw();
-					}
-			}
-
-			window.addEventListener("keydown", function(event) { 
-				if (event.keyCode == 38)
-				{
-						jump();
-				}
-			});
-
-			function jump () {
-
-					if (!ball.jumping)
-					{
-						ball.jumping = true;
-					}
-			}
-
-			function land () {
-					ball.jumping = false;
-			}
+		<div align="center"> <img id="logo" src="logo.png"/> </div>
+		<canvas id="game" width="900" height="700" style.cursor="default"></canvas>
+		<script src="barrel.js" type="text/javascript"> 
 		</script>
-		<h3>Rules</h3>
+		<div align="center"> 
+			<img id="rules" src="rules.png" align="center" />
+			<h3> Press [ ↑ ] to jump. Avoid spikes at all costs. See how much score you can earn before lose</h3>
+			<h4> If you would like to restart the game, you have to refresh the page. Sadly, the Restart button didn't work</h4>
+		</div>
 
 	</body>
 
