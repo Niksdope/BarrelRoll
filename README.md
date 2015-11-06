@@ -25,13 +25,31 @@ At the beginning of the game, two objects are created. One for the barrel and on
     init(); 
 ```
 
-function init() {} draws the background and floor of the game and then an opaic rectangle over the entire page asking for user keyboard input, for which an event listener will call the draw() function.
+function init() {} draws the background and floor of the game and then an opaic rectangle over the entire page asking for any user keyboard input, for which an event listener will call the draw() function.
 
 ```
     window.addEventListener("keydown", function(event) {});
 ```
 
-The draw() function 
+The draw() function has a setTimeout() function inside of it to control the amount of frames that window.requestAnimation frame() will draw each second. The setTimeout() function includes all the function calls and condition checks for the game running as well as wraps the requestAnimFrame inside an if that checks if the game should still be drawing (set to false when game over)
+
+```
+    function draw() {
+	    setTimeout(function() {
+	        if (drawing)
+	        {
+	            window.requestAnimationFrame(draw);
+	        }
+	        
+	        // Draw functions
+	        // Condition checks e.g. everytime score goes up by 100 increase the speed of the game
+	        // Check if (colliding()){ //Ends game if barrel and spikes are colliding}
+	    }, Math.round(1000/fps));
+	}
+```
+
+The rest of the JavaScript file just has functions for various different things for the game i.e. the functions for drawing the game in draw() include drawBackground(), drawFloor() and drawSpikes(). drawBackground, drawFloor and drawSpikes create an illusion of the barrel moving across the cave but all they are doing is looping a picture going across the screen to the left.
+
 
 # The files in the repository
 Launch the **index.html** file diretly in your browser and it should recieve information from **barrel.js** and **barrel.css** files to make the game run.
