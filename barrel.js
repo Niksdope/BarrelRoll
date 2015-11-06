@@ -202,7 +202,7 @@ function draw() {
 			endScreen();
 		}
 
-	}, Math.round(1000/fps));
+	}, Math.floor(1000/fps));
 }
 // _____________ Drawing the moving floor _________________________________________
 function drawFloor() {
